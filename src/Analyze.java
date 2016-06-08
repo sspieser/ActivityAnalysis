@@ -69,11 +69,11 @@ public class Analyze {
 			for (int zidx = 0; zidx < this.results.size(); zidx++) {
 				int timeInZone = this.results.get(zidx);
 				int h = timeInZone / 60 / 60;
-				int min = timeInZone / 60;
+				int min = (timeInZone - h * 60 * 60) / 60;
 				int sec = timeInZone - (min * 60 + h * 60 * 60);
 				//double total = getTotalTime();
-				sb.append(";" + h + ":" + min + ":" 
-							+ sec);
+				sb.append(";\"" + h + ":" + min + ":" 
+							+ sec + "\"");
 			}
 			sb.append("");
 			

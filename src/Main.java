@@ -24,6 +24,7 @@ public class Main {
 			
 			a.doAnalyze();
 			System.out.println(a.toCSV());
+			//System.out.println(a.toString());
 		}
 		
 	    /*JFrame window = new JFrame();
