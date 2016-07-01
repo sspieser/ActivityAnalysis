@@ -9,7 +9,6 @@ import java.util.HashMap;
 import parser.Activity;
 import parser.GPXNode;
 
-
 public class Analyze {
 	private HashMap<Integer, Zone>  defzones = null;
 	private ArrayList<GPXNode> nodes;
