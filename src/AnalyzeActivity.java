@@ -9,7 +9,7 @@ import java.util.HashMap;
 import parser.Activity;
 import parser.GPXNode;
 
-public class Analyze {
+public class AnalyzeActivity {
 	private HashMap<Integer, Zone>  defzones = null;
 	private ArrayList<GPXNode> nodes;
 	//private HashMap<Integer, Integer> results = new HashMap<Integer,Integer>();
@@ -80,7 +80,7 @@ public class Analyze {
 		}
 	}
 
-	public Analyze(Zones defzones, Activity activity) {
+	public AnalyzeActivity(Zones defzones, Activity activity) {
 		if (activity != null) {
 			this.nodes = activity.getNodes();			
 			this.defzones = defzones.getZones(activity.getType()); // recupere les zones pour un type d'activite	
@@ -136,7 +136,11 @@ public class Analyze {
 			GPXNode g = nodes.get(i);
 			if (prev != null) {
 				int target = findZone(g.getHR());
-				zx.get(target).add(dateDifference(g, prev));
+				if (dateDifference(g, prev) < 0) {
+					// TODO: impossible !? a analyser!!
+				} else {
+					zx.get(target).add(dateDifference(g, prev));
+				}
 			}
 			prev = g;
 		}
@@ -151,12 +155,16 @@ public class Analyze {
 	 * @param threshold in secs
 	 */
 	private HashMap<Integer, ArrayList<Integer>> normalize(HashMap<Integer, ArrayList<Integer>> zx, int threshold) {
+		//int removed = 0;
 		for (int zidx = 0; zidx < getZoneCount(); zidx++) {
-			for(int i = 0; i < zx.get(zidx).size(); i++){
-				if (zx.get(zidx).get(i) > threshold)
+			for (int i = 0; i < zx.get(zidx).size(); i++) {
+				if (zx.get(zidx).get(i) > threshold) {
 					zx.get(zidx).remove(i);
+					//removed++;
+				}
 			}
 		}
+		//System.err.println("** removed " + removed + " point(s)");
 		return zx;
 	}
 	/*

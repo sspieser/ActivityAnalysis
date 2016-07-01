@@ -1,13 +1,6 @@
 package parser;
-import java.io.File;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 /**
  * 
@@ -30,7 +23,8 @@ public abstract interface GenericParser {
 	 * Lecture des entetes de l'activite
 	 * 
 	 * @return
+	 * @throws GPXParserException 
 	 */
-	abstract Activity readHeader();
+	abstract Activity readHeader() throws GPXParserException;
 	
 }

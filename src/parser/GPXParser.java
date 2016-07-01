@@ -7,9 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
-import org.w3c.dom.Element;
 
-import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,7 +61,7 @@ public class GPXParser implements GenericParser {
 	}	
 
 	@Override
-	public Activity readHeader() {
+	public Activity readHeader() throws GPXParserException {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATEPATTERN);
 		String name = null;
 		Date start;
@@ -74,21 +73,27 @@ public class GPXParser implements GenericParser {
 			Document doc = dBuilder.parse(xml);
 		
 			NodeList hrList = doc.getElementsByTagName("metadata");
-			NodeList nodes = hrList.item(0).getChildNodes();
-			Node node = nodes.item(0);
-			String time = node.getNextSibling().getTextContent();
-			start = (Date) sdf.parse(time);
-			
-			hrList = doc.getElementsByTagName("trk");
-			nodes = hrList.item(0).getChildNodes();
-			node = nodes.item(0);
-			name = node.getNextSibling().getTextContent();
-			return new Activity(start, name);
+			if (hrList != null && hrList.item(0) != null) {
+				NodeList nodes = hrList.item(0).getChildNodes();
+				Node node = nodes.item(0);
+				String time = node.getNextSibling().getTextContent();
+				start = (Date) sdf.parse(time);
+				
+				hrList = doc.getElementsByTagName("trk");
+				nodes = hrList.item(0).getChildNodes();
+				node = nodes.item(0);
+				name = node.getNextSibling().getTextContent();
+				
+				return new Activity(start, name);
+			} else {
+				// TODO: tenter de trouver la date du 1er point?
+			}
+			return null;		
+		} catch (ParseException p) {
+			throw new GPXParserException("Activity::readHeader parse exception: " + p.getMessage());
+		} catch(Exception e) {
+			throw new GPXParserException("Activity::readHeader exception: " + e.getMessage());
 		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	/**

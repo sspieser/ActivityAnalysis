@@ -29,8 +29,9 @@ public abstract class ParserHelper {
 	/**
 	 * 
 	 * @return
+	 * @throws GPXParserException 
 	 */
-	public static Activity getActivity(GenericParser parser) {		
+	public static Activity getActivity(GenericParser parser) throws GPXParserException {		
 		Activity activity = parser.readHeader();
 		if (activity != null) {
 			ArrayList<GPXNode>nodes = parser.runParse();
